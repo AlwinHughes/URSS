@@ -1,9 +1,8 @@
-upperalph = c(LETTERS, " ", ".", ",", "!", "?", "'", ")", "-", "_", "+", "=", as.character(0:9))
-loweralph = c(letters, " ", ".", ",", "!", "?", "(", "'", ")", "-", "_", "+", "=", as.character(0:9))
-fullalph = c(letters, LETTERS, " ", ".", ",", "!", "?", "(", "'", ")", "-", "_", "+", "=", as.character(0:9), "`")
+upperalph = c(LETTERS, " ", ".", ",", "!", "?", "'", ")", "-", "_", "+", "=", ":", as.character(0:9))
+loweralph = c(letters, " ", ".", ",", "!", "?", "(", "'", ")", "-", "_", "+", "=", ":", as.character(0:9))
+fullalph = c(letters, LETTERS, " ", ".", ",", "!", "?", "(", "'", ")", ":", "\"", "-", ";", "—", "'", "’", "“", "“", "”","‘", "_", as.character(0:9), "`")
 
-
-
+lotwfullalph = c(letters, LETTERS, " ", ".", ",", "!", "?", "(", "'", ")", ":", "-", ";", "—", "'", "’", "“", "“", "”","‘", as.character(0:9), "`")
 
 createSubCyph <- function(alphlength) {
   k = 0
@@ -34,7 +33,7 @@ composeCyper <- function(c1, c2) {
   }
 
   res = integer(length(c1))
-  
+
   for(i in 1: length(c1)) {
     res[i] = c2[c1[i]]
   }
@@ -57,6 +56,7 @@ encrypt = function(cypher, alphabet, message) { #
       return()
     }
   }
+
   cyphertext = applycypher(cypher, alphabet, strsplit(message, '')[[1]])
 
   return(paste(cyphertext, collapse=''))
@@ -72,6 +72,86 @@ applycypher <- function(cypher, alphabet, message) {
   }
 
   return(cyphertext)
+}
+
+applycyphernum  <- function(cypher, nummess) {
+  inv = inverseSubCyper(cypher)
+
+  cyphtext = character(length = length(nummess))
+  for(i in 1: length(nummess)) {
+    cyphtext[i] = cypher[nummess[i]]
+  }
+  return(cyphtext)
+}
+
+
+getFrequencies <- function(text, alphabet) {
+
+  messagevec = strsplit(text, "")[[1]]
+  for( i in 1:length(messagevec)) {
+    if(is.na(match(messagevec[i], alphabet))) {
+      print("message contains letters not in alphabet")
+      print(messagevec[i])
+      return()
+    }
+  }
+
+  P = matrix( ncol = length(alphabet), nrow= length(alphabet), 0)
+
+  print(P)
+
+  currenti = match(messagevec[1], alphabet)
+
+  for(i in 2:length(messagevec)) {
+    nexti = match(messagevec[i], alphabet)
+    P[currenti, nexti] = P[currenti, nexti] +1
+    currenti = nexti
+  }
+
+  return(P)
+}
+
+
+
+
+n = 0 
+getFrequenciesFromBook <- function(book, alphabet) {
+
+  #matrix of frequencies of on letter after another
+  P = matrix( ncol = length(alphabet), nrow= length(alphabet), 0)
+
+  for(i in 1: length(book)) {
+
+    messagevec = strsplit(book[i], "")[[1]]
+    if(length(messagevec) > 1) {
+      n <<-  n + length(messagevec)
+      for( j in 1:length(messagevec)) {
+        if(is.na(match(messagevec[j], alphabet))) {
+          print("message contains letters not in alphabet")
+          print(messagevec[j])
+          print(book[i])
+          return()
+        }
+      }
+
+      currenti = match(messagevec[1], alphabet)
+
+      for(j in 2:length(messagevec)) {
+        nexti = match(messagevec[j], alphabet)
+        P[currenti, nexti] = P[currenti, nexti] +1
+        currenti = nexti
+      }
+    }
+
+  }
+  return(P)
+}
+
+convertMessageToNumeric = function(message, alphabet) {
+  if(length(message) == 1){
+    message = strsplit(message, "")[[1]]
+  }
+  return(mapply(function(x) { return(match(x,alphabet))}, message))
 }
 
 
