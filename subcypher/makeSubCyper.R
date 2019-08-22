@@ -77,7 +77,7 @@ applycypher <- function(cypher, alphabet, message) {
 applycyphernum  <- function(cypher, nummess) {
   inv = inverseSubCyper(cypher)
 
-  cyphtext = character(length = length(nummess))
+  cyphtext = numeric(length = length(nummess))
   for(i in 1: length(nummess)) {
     cyphtext[i] = cypher[nummess[i]]
   }
@@ -91,7 +91,7 @@ getFrequencies <- function(text, alphabet) {
   for( i in 1:length(messagevec)) {
     if(is.na(match(messagevec[i], alphabet))) {
       print("message contains letters not in alphabet")
-      print(messagevec[i])
+      #print(messagevec[i])
       return()
     }
   }
@@ -149,9 +149,11 @@ getFrequenciesFromBook <- function(book, alphabet) {
 
 convertMessageToNumeric = function(message, alphabet) {
   if(length(message) == 1){
+    print("splitting message")
     message = strsplit(message, "")[[1]]
   }
   return(mapply(function(x) { return(match(x,alphabet))}, message))
 }
+
 
 

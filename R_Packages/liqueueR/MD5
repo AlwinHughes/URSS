@@ -1,0 +1,10 @@
+03c5a215627fe88a6b31f47af9cec005 *DESCRIPTION
+1bb66ea3dd8b370c14a55dd9d4f1a0d9 *NAMESPACE
+bdb4eb6bc5996f0c253e2092e564ac9c *R/queue.R
+d11359a9d3e7c7c2192901e6b3361d74 *README.md
+747d0b5bd081e78e5da4793eeac5b83c *man/PriorityQueue-class.Rd
+1c1822b93f258a89ec0b0bf368765bd6 *man/Queue-class.Rd
+a8cfaf6228a8f0add158be51e2cd492a *man/Stack-class.Rd
+9ca322b39cbcec6f45872acbc832a052 *tests/testthat.R
+9b1d56c857f7232bc1d9eca724e0956b *tests/testthat/test_priority_queue.R
+e86f620302d25909cc5588c75c36cf71 *tests/testthat/test_queue.R
