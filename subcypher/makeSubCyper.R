@@ -2,9 +2,8 @@ upperalph = c(LETTERS, " ", ".", ",", "!", "?", "'", ")", "-", "_", "+", "=", ":
 loweralph = c(letters, " ", ".", ",", "!", "?", "(", "'", ")", "-", "_", "+", "=", ":", as.character(0:9))
 fullalph = c(letters, LETTERS, " ", ".", ",", "!", "?", "(", "'", ")", ":", "\"", "-", ";", "—", "'", "’", "“", "“", "”","‘", "_", as.character(0:9), "`")
 
-lotwfullalph = c(letters, LETTERS, " ", ".", ",", "!", "?", "(", "'", ")", ":", "-", ";", "—", "'", "’", "“", "“", "”","‘", as.character(0:9), "`")
+lotwfullalph = c(letters, LETTERS, " ", ".", ",", "!", "?", "(", "'", ")", ":", "-", ";", "—", "\"", as.character(0:9), "`")
 
-alph2
 
 createSubCiph <- function(alphlength) {
   k = 0

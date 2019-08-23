@@ -47,16 +47,18 @@ getBeta = function(message.num, alphabet) {
   return(beta)
 }
 
-getP.log = function(book.num,alphabet) {
+getP.log = function(book.num, alphabet) {
   P.log = matrix(ncol = length(alphabet), nrow =length(alphabet), 0)
-  n = length(book.num);
+  
 
-
-  for(i in 2:length(booknvec)) {
+  for(i in 2:length(book.num)) {
     P.log[book.num[i-1], book.num[i]] = P.log[book.num[i-1], book.num[i]] +1
   }
 
-  P.log = P.log / rowSums(P.log)
+  P.log = apply(P.log, 2, function(x) { 
+    if(sum(x) == 0) { return(numeric(length(alphabet))) }
+    return(x/sum(x))
+  })
 
   P.log = apply(P.log, c(1,2), function(x) {
     if(x == 0) {
