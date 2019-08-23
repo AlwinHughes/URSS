@@ -4,6 +4,8 @@ fullalph = c(letters, LETTERS, " ", ".", ",", "!", "?", "(", "'", ")", ":", "\""
 
 lotwfullalph = c(letters, LETTERS, " ", ".", ",", "!", "?", "(", "'", ")", ":", "-", ";", "—", "'", "’", "“", "“", "”","‘", as.character(0:9), "`")
 
+alph2
+
 createSubCiph <- function(alphlength) {
   k = 0
   alphabet = 1:alphlength
@@ -21,7 +23,7 @@ createSubCiph <- function(alphlength) {
 inverseSubCipher  <- function(cipher) {
   inverse = integer(length(cipher))
   for( i in 1: length(cipher)) {
-    inverse[cipher[i] ] = i
+    inverse[cipher[i]] = i
   }
   return(inverse)
 }
