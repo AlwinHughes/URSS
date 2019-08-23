@@ -1,5 +1,7 @@
 lotwfullalph = c(letters, LETTERS, " ", ".", ",", "!", "?", "(", "'", ")", ":", "-", ";", "—", "'", "’", "“", "“", "”","‘", as.character(0:9), "`")
 
+alph.simp = c(letters, " ", ",", ".", "'", "!", "?", "-", ":", ";")
+
 convertMessageToNumeric = function(message, alphabet) {
   if(length(message) == 1){
     message = strsplit(message, "")[[1]]
@@ -27,11 +29,11 @@ getFrequenciesNum <- function(nummessage, alphabet) {
   return(M)
 }
 
-getBeta = function(message, alphabet) {
+getBeta = function(message.num, alphabet) {
   beta = numeric(length(alphabet))
 
-  for(i in 1:length(message)) {
-    beta[message[i]] = beta[message[i]] + 1
+  for(i in 1:length(message.num)) {
+    beta[message.num[i]] = beta[message.num[i]] + 1
   }
 
   
@@ -39,7 +41,7 @@ getBeta = function(message, alphabet) {
     if(x == 0) {
       return(-14)
     }
-    return(log(x/length(message)))
+    return(log(x/length(message.num)))
   }, beta )
 
   return(beta)
@@ -65,7 +67,7 @@ getP.log = function(booknvec,alphabet) {
   return(P.log)
 }
 
-breakCipher = function(numcitext, beta, P, alphabet, M = 100) {
+breakCipher = function(ciphertext.num, beta, P, alphabet, M = 100) {
 
   k = length(alphabet)
 
@@ -75,14 +77,14 @@ breakCipher = function(numcitext, beta, P, alphabet, M = 100) {
   msig = matrix(ncol=k, nrow=k)
   mphi = matrix(ncol=k, nrow=k)
 
-  msig = getFrequenciesNum(numcitext, alphabet)
+  msig = getFrequenciesNum(ciphertext.num, alphabet)
 
   pq = PriorityQueue$new()
   pq$push(sigma, 0)
 
   sigma.l = 0
 
-  betasig = beta[numcitext[1]]
+  betasig = beta[ciphertext.num[1]]
 
   for( l in 1:M) {
 
@@ -98,16 +100,15 @@ breakCipher = function(numcitext, beta, P, alphabet, M = 100) {
     mphi = constructMphi(msig,ij)
 
     #find betaphi
-    betaphi = beta[match(numcitext[1], phi)]
+    betaphi = beta[match(ciphertext.num[1], phi)]
     #print(betasig)
     #print(betaphi)
 
     #compute alpha and new liklihood
-    temp = liklihood(sigma.l, msig, mphi, P.log, betasig, betaphi)
+    temp = liklihood(sigma.l, msig, mphi, P, betasig, betaphi)
     alpha = exp(temp[1])
     phi.l = temp[2]
 
-    print(alpha)
     #print(exp(alpha))
     #generate
     U = runif(1)
@@ -131,7 +132,7 @@ breakCipher = function(numcitext, beta, P, alphabet, M = 100) {
     }
 
   }
-  print(accepts)
+  #print(accepts)
   return(pq)
 }
 
@@ -151,10 +152,10 @@ constructMphi = function(msig, ij) {
   return(matphi)
 }
 
-liklihood = function(sigma.l, msig, mphi, P.log, betasig, betaphi) {
+liklihood = function(sigma.l, msig, mphi, P, betasig, betaphi) {
   beta.phi = 0
   beta.sigma = 0
-  l = beta.phi - beta.sigma + sum((mphi - msig) * P.log)
+  l = beta.phi - beta.sigma + sum((mphi - msig) * P)
   return( c(min(c(1, l)), l + sigma.l))
 }
 

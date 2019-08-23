@@ -4,7 +4,7 @@ fullalph = c(letters, LETTERS, " ", ".", ",", "!", "?", "(", "'", ")", ":", "\""
 
 lotwfullalph = c(letters, LETTERS, " ", ".", ",", "!", "?", "(", "'", ")", ":", "-", ";", "—", "'", "’", "“", "“", "”","‘", as.character(0:9), "`")
 
-createSubCyph <- function(alphlength) {
+createSubCiph <- function(alphlength) {
   k = 0
   alphabet = 1:alphlength
   while(k < alphlength *2 ) {
@@ -18,17 +18,17 @@ createSubCyph <- function(alphlength) {
   return(alphabet)
 }
 
-inverseSubCyper  <- function(cypher) {
-  inverse = integer(length(cypher))
-  for( i in 1: length(cypher)) {
-    inverse[cypher[i]] = i
+inverseSubCipher  <- function(cipher) {
+  inverse = integer(length(cipher))
+  for( i in 1: length(cipher)) {
+    inverse[cipher[i] ] = i
   }
   return(inverse)
 }
 
-composeCyper <- function(c1, c2) {
+composeCipher <- function(c1, c2) {
   if(length(c1) != length(c2)) {
-    print("cypher lenghts do not match")
+    print("cipher lenghts do not match")
     return(NULL)
   }
 
@@ -41,10 +41,10 @@ composeCyper <- function(c1, c2) {
   return(res)
 }
 
-encrypt = function(cypher, alphabet, message) { # 
+encrypt = function(cipher, alphabet, message) { # 
 
-  if(length(cypher) != length(alphabet)) {
-    print("error cyper and alphabet length not equal")
+  if(length(cipher) != length(alphabet)) {
+    print("error cipher and alphabet length not equal")
     return()
   }
 
@@ -57,31 +57,31 @@ encrypt = function(cypher, alphabet, message) { #
     }
   }
 
-  cyphertext = applycypher(cypher, alphabet, strsplit(message, '')[[1]])
+  ciphertext = applycipher(cipher, alphabet, strsplit(message, '')[[1]])
 
-  return(paste(cyphertext, collapse=''))
+  return(paste(ciphertext, collapse=''))
 }
 
-applycypher <- function(cypher, alphabet, message) {
-  n = length(cypher)
+applycipher <- function(cipher, alphabet, message) {
+  n = length(cipher)
 
-  inv = inverseSubCyper(cypher)
-  cyphertext = character(length=length(message))
+  inv = inverseSubCipher(cipher)
+  ciphertext = character(length=length(message))
   for(i in 1:length(message)) {
-    cyphertext[i] = alphabet[cypher[match(message[i], alphabet)]]
+    ciphertext[i] = alphabet[cipher[match(message[i], alphabet)]]
   }
 
-  return(cyphertext)
+  return(ciphertext)
 }
 
-applycyphernum  <- function(cypher, nummess) {
-  inv = inverseSubCyper(cypher)
+applycipher.num  <- function(cipher, plaintext.num) {
+  inv = inverseSubCipher(cipher)
 
-  cyphtext = numeric(length = length(nummess))
-  for(i in 1: length(nummess)) {
-    cyphtext[i] = cypher[nummess[i]]
+  ciphtext = numeric(length = length(plaintext.num))
+  for(i in 1: length(plaintext.num)) {
+    ciphtext[i] = cipher[plaintext.num[i]]
   }
-  return(cyphtext)
+  return(ciphtext)
 }
 
 
@@ -98,7 +98,7 @@ getFrequencies <- function(text, alphabet) {
 
   P = matrix( ncol = length(alphabet), nrow= length(alphabet), 0)
 
-  print(P)
+  #print(P)
 
   currenti = match(messagevec[1], alphabet)
 
