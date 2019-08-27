@@ -29,8 +29,7 @@ inverseSubCipher  <- function(cipher) {
 
 composeCipher <- function(c1, c2) {
   if(length(c1) != length(c2)) {
-    print("cipher lenghts do not match")
-    return(NULL)
+    print("cipher lenghts do not match") return(NULL)
   }
 
   res = integer(length(c1))
@@ -153,7 +152,14 @@ convertMessageToNumeric = function(message, alphabet) {
     print("splitting message")
     message = strsplit(message, "")[[1]]
   }
-  return(mapply(function(x) { return(match(x,alphabet))}, message))
+  return(mapply(function(x) { 
+  x = match(x,alphabet)
+  if(is.na(x)) {
+    print("alphabet doesn't cover message");
+    return()
+  }
+  return(x)
+}, message))
 }
 
 

@@ -1,6 +1,6 @@
-lotwfullalph = c(letters, LETTERS, " ", ".", ",", "!", "?", "(", "'", ")", ":", "-", ";", "—", "'", "’", "“", "“", "”","‘", as.character(0:9), "`")
+lotwfullalph = c(letters, LETTERS, " ", ".", ",", "!", "?", "(", "'", ")", ":", "-", ";", "—", "\"", as.character(0:9), "*", "=", "/")
 
-alph.simp = c(letters, " ", ",", ".", "'", "!", "?", "-", ":", ";")
+alph.simp = c(letters, " ", ",", ".", "'", "!", "?", "-", ":", ";", "\"")
 
 convertMessageToNumeric = function(message, alphabet) {
   if(length(message) == 1){
@@ -33,6 +33,9 @@ getBeta = function(message.num, alphabet) {
   beta = numeric(length(alphabet))
 
   for(i in 1:length(message.num)) {
+    if(is.na(message.num[i])) {
+      print(message.num[i])
+    }
     beta[message.num[i]] = beta[message.num[i]] + 1
   }
 
@@ -55,10 +58,20 @@ getP.log = function(book.num, alphabet) {
     P.log[book.num[i-1], book.num[i]] = P.log[book.num[i-1], book.num[i]] +1
   }
 
-  P.log = apply(P.log, 2, function(x) { 
-    if(sum(x) == 0) { return(numeric(length(alphabet))) }
+
+  
+  P.log = apply(P.log, 1, function(x) { 
+    if(sum(x) == 0) { 
+      print("all zero")
+      return(numeric(length(alphabet)))
+    }
+    if(sum(x) == 1) {
+      print("one")
+    }
     return(x/sum(x))
   })
+
+
 
   P.log = apply(P.log, c(1,2), function(x) {
     if(x == 0) {
@@ -161,5 +174,15 @@ liklihood = function(sigma.l, msig, mphi, P, betasig, betaphi) {
   beta.sigma = 0
   l = beta.phi - beta.sigma + sum((mphi - msig) * P)
   return( c(min(c(1, l)), l + sigma.l))
+}
+
+writeResult = function(pq, ciphertext.num, alph) {
+  a = character(length(pq$data))
+
+  for(i in 1:length(pq$data)) {
+    a[i] = paste(convertNumericToMessage(applycipher.num(pq$data[[i]], ciphertext.num), alph), collapse = '')
+  }
+
+  write(paste(a, collapse = "\n\n "), "res.txt")
 }
 
