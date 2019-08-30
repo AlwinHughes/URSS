@@ -170,7 +170,6 @@ breakCipher = function(ciphertext.num, beta, P, alphabet, M = 100) {
   mphi = matrix(ncol=k, nrow=k)
 
   msig = getFrequenciesNum(ciphertext.num, alphabet)
-  #print(msig)
 
   pq = PriorityQueue$new()
   pq$push(sigma, 0)
@@ -178,23 +177,18 @@ breakCipher = function(ciphertext.num, beta, P, alphabet, M = 100) {
   sigma.l = 0
 
   betasig = beta[ciphertext.num[1]]
-  #print(betasig)
 
   phi = sigma
   for( l in 1:M) {
-    cat("\n\n")
-
-
-
     # --my version --
 
       #propose phi
       phi = sigma
       ij = sample(1:length(alphabet),2)
      
+      #make phi by swaping parts of sigma
       phi[ij[1]] = sigma[ij[2]]
       phi[ij[2]] = sigma[ij[1]]
-      print(phi)
 
 
 
@@ -206,20 +200,16 @@ breakCipher = function(ciphertext.num, beta, P, alphabet, M = 100) {
     mphi = constructMphi(msig,ij)
 
     betaphi = beta[match(ciphertext.num[1], phi)]
-    print(betaphi)
-    #print(betasig)
 
     temp = liklihood(sigma.l, msig, mphi, P, betasig, betaphi)
     alpha = temp[1]
     phi.l = temp[2]
-    print(phi.l)
 
     if(rbinom(1,1,alpha)) {
-      print("accept")
       accepts = accepts + 1
+      #push if something with same liklihood doesn't already exist
       if(is.na(match(-phi.l, pq$priorities))) {
         pq$push(phi, -phi.l)
-        print("pushing")
       }
 
       #pop if too long
@@ -233,7 +223,6 @@ breakCipher = function(ciphertext.num, beta, P, alphabet, M = 100) {
       betasig = betaphi
       sigma.l = phi.l
 
-      #print("-----")
     }
 
   }
@@ -243,38 +232,14 @@ breakCipher = function(ciphertext.num, beta, P, alphabet, M = 100) {
 
 
 constructMphi = function(msig, ij) {
-
   matphi = msig
-  
   matphi[rev(ij),] = matphi[ij,]
   matphi[,rev(ij)] = matphi[,ij]
   return(matphi)
-
-
-  #i = ij[1]
-  #j = ij[2]
-  #ri = matphi[i,]
-  #rj = matphi[j,]
-  #ci = matphi[,i]
-  #cj = matphi[,j]
-  #matphi[i,] = rj
-  #matphi[j,] = ri
-  #matphi[,i] = cj
-  #matphi[,j] = ci
-  #return(matphi)
 }
 
 liklihood = function(sigma.l, msig, mphi, P, betasig, betaphi) {
-
-  
-  cat("diff sum ", sum((mphi - msig) * P), "\n")
-
   l = betaphi - betasig + sum((mphi - msig) * P)
-  #print("l")
-  #print(l)
-
-  #print("sigma.l")
-  #print(sigma.l)
   return( c(min(c(1, exp(l))), l + sigma.l))
 }
 
