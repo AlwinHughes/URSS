@@ -2,7 +2,10 @@ upperalph = c(LETTERS, " ", ".", ",", "!", "?", "'", ")", "-", "_", "+", "=", ":
 loweralph = c(letters, " ", ".", ",", "!", "?", "(", "'", ")", "-", "_", "+", "=", ":", as.character(0:9))
 fullalph = c(letters, LETTERS, " ", ".", ",", "!", "?", "(", "'", ")", ":", "\"", "-", ";", "—", "'", "’", "“", "“", "”","‘", "_", as.character(0:9), "`")
 
-lotwfullalph = c(letters, LETTERS, " ", ".", ",", "!", "?", "(", "'", ")", ":", "-", ";", "—", "\"", as.character(0:9), "`")
+#lotwfullalph = c(letters, LETTERS, " ", ".", ",", "!", "?", "(", "'", ")", ":", "-", ";", "—", "\"", as.character(0:9), "`")
+
+
+lotwfullalph <- c(letters, LETTERS, " ", ".", ",", "!", "?", "'", ":", "-", ";", "—", "\"", "\n")
 
 
 createSubCiph <- function(alphlength) {
@@ -29,7 +32,8 @@ inverseSubCipher  <- function(cipher) {
 
 composeCipher <- function(c1, c2) {
   if(length(c1) != length(c2)) {
-    print("cipher lenghts do not match") return(NULL)
+    print("cipher lenghts do not match") 
+    return(NULL)
   }
 
   res = integer(length(c1))
@@ -152,7 +156,7 @@ convertMessageToNumeric = function(message, alphabet) {
     print("splitting message")
     message = strsplit(message, "")[[1]]
   }
-  return(mapply(function(x) { 
+  return(mapply(function(x) {
   x = match(x,alphabet)
   if(is.na(x)) {
     print("alphabet doesn't cover message");
