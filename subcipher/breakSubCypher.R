@@ -114,8 +114,8 @@ breakCipher = function(ciphertext.num, beta, P, alphabet, M = 100) {
     }
 
   }
-  print(accepts)
-  return(pq)
+  #print(accepts)
+  return(list(accepts, pq))
 }
 
 constructMphi = function(msig, ij) {
