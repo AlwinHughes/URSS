@@ -2,6 +2,8 @@ lotwfullalph <- c(letters, LETTERS, " ", ".", ",", "!", "?", "'", ":", "-", ";",
 
 alph.simp = c(letters, " ", ",", ".", "'", "!", "?", "-", ":", ";", "\"")
 
+fullalph <- c(letters, LETTERS, " ", ".", ",", "!", "?", "'", ":", "-", ";", "—", "\"", "\n", "*", "(", ")", 0:9, "=", "/")
+
 convertMessageToNumeric = function(message, alphabet) {
   if(length(message) == 1){
     message = strsplit(message, "")[[1]]
@@ -89,13 +91,13 @@ breakCipher = function(ciphertext.num, beta, P, alphabet, M = 100) {
 
     betaphi = beta[match(ciphertext.num[1], phi)]
 
-    temp = liklihood(sigma.l, msig, mphi, P, betasig, betaphi)
+    temp = likelihood(sigma.l, msig, mphi, P, betasig, betaphi)
     alpha = temp[1]
     phi.l = temp[2]
 
     if(rbinom(1,1,alpha)) {
       accepts = accepts + 1
-      #push if something with same liklihood doesn't already exist
+      #push if something with same likelihood doesn't already exist
       if(is.na(match(-phi.l, pq$priorities))) {
         pq$push(phi, -phi.l)
       }
@@ -125,7 +127,8 @@ constructMphi = function(msig, ij) {
   return(matphi)
 }
 
-liklihood = function(sigma.l, msig, mphi, P, betasig, betaphi) {
+
+likelihood = function(sigma.l, msig, mphi, P, betasig, betaphi) {
   l = betaphi - betasig + sum((mphi - msig) * P)
   return( c(min(c(1, exp(l))), l + sigma.l))
 }

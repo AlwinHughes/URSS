@@ -2,7 +2,7 @@
 runExperiment = function(keys.number, attempts.num, alph, logP, beta, plaintext.num, M, m.comment="") {
   n = length(alph)
 
-  keys = mongo(db="R", collection="keys")
+  keys = mongo(db="R", collection="keys") 
   attempts = mongo(db="R", collection="attempts")
 
 
@@ -15,7 +15,7 @@ runExperiment = function(keys.number, attempts.num, alph, logP, beta, plaintext.
     ciphertext.num = applycipher.num(key, plaintext.num)
 
     out.accept.rate = numeric(attempts.num)
-    out.liklehood = numeric(attempts.num)
+    out.likelihood = numeric(attempts.num)
     out.az.diff = numeric(attempts.num)
     out.all.diff = numeric(attempts.num)
     out.readable = logical(attempts.num)
@@ -34,7 +34,7 @@ runExperiment = function(keys.number, attempts.num, alph, logP, beta, plaintext.
       readable = as.logical(tolower(readline("Is this readable? [y/n]\n"))=="y")
 
       out.accept.rate[j] = res[[1]]/M
-      out.liklehood[j] = res[[2]]$priorities[[10]]
+      out.likelihood[j] = res[[2]]$priorities[[10]]
       out.az.diff[j] = 26 - sum(suggested.key[1:26] == key[1:26])
       out.all.diff[j] = n - sum(suggested.key == key)
       out.readable[j] = readable
@@ -43,7 +43,7 @@ runExperiment = function(keys.number, attempts.num, alph, logP, beta, plaintext.
     }
     #print(apply(function(x) { return(I(list(x)))}, 1, out.key) )
     
-    attempts.doc = data.frame(acceptance =out.accept.rate, liklehood = out.liklehood, azddiff = out.az.diff, alldiff = out.all.diff, readable = out.readable)
+    attempts.doc = data.frame(acceptance =out.accept.rate, likelihood = out.likelihood, azddiff = out.az.diff, alldiff = out.all.diff, readable = out.readable)
     attempts.doc$key = apply(out.key, 1, function(x) {return(list(x)) })
 
 
@@ -57,13 +57,26 @@ runExperiment = function(keys.number, attempts.num, alph, logP, beta, plaintext.
     key.doc$comment = m.comment
     key.doc$iterations = M
 
-    print("test2")
+    mphi = getFrequenciesNum(ciphertext.num, alph)
+
+    mphi[1:n,] = mphi[key,]
+    mphi[,1:n] = mphi[,key]
+
+    key.doc$likelihood = likelihood(
+      0, matrix(ncol=n, nrow=n, 0), 
+      getFrequenciesNum(applycipher.num(inverseSubCipher(key), ciphertext.num), alph),
+      logP, beta[ciphertext.num[1]],
+      beta[match(applycipher.num(inverseSubCipher(key), ciphertext.num[1]), key)]
+      )[[2]]
+
     k = insertAndReturn(keys, key.doc)
-    print(k)
 
     attempts.doc$keyid = k$id
 
     attempts$insert(attempts.doc)
+
+    print(k)
+    print(attempts.doc)
 
   }
 
