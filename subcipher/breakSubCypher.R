@@ -49,7 +49,7 @@ transposition <- function(sigma, ij=NA) {
 
 
 
-breakCipher = function(ciphertext.num, beta, P, alphabet, M = 100) {
+breakCipher = function(ciphertext.num, beta, P, alphabet, M = 100, func = identity) {
 
   k = length(alphabet)
 
@@ -75,7 +75,7 @@ breakCipher = function(ciphertext.num, beta, P, alphabet, M = 100) {
       #propose phi
       phi = sigma
       ij = sample(1:length(alphabet),2)
-     
+
       #make phi by swaping parts of sigma
       phi[ij[1]] = sigma[ij[2]]
       phi[ij[2]] = sigma[ij[1]]
@@ -92,7 +92,7 @@ breakCipher = function(ciphertext.num, beta, P, alphabet, M = 100) {
     betaphi = beta[match(ciphertext.num[1], phi)]
 
     temp = likelihood(sigma.l, msig, mphi, P, betasig, betaphi)
-    alpha = temp[1]
+    alpha = func(temp[1])
     phi.l = temp[2]
 
     if(rbinom(1,1,alpha)) {
@@ -142,4 +142,12 @@ writeResult = function(pq, ciphertext.num, alph) {
 
   write(paste(a, collapse = "\n\n "), "res.txt")
 }
+
+
+
+
+arrayBreak = function(ciphertext.num, beta, P, alphabet, M = 100, func = identity) {
+
+}
+
 

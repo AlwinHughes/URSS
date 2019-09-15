@@ -1,5 +1,7 @@
 lotwfullalph <- c(letters, LETTERS, " ", ".", ",", "!", "?", "'", ":", "-", ";", "—", "\"", "\n")
 
+
+
 convertMessageToNumeric = function(message, alphabet) {
   if(length(message) == 1){
     message = strsplit(message, "")[[1]]
@@ -46,13 +48,16 @@ getBeta = function(message.num, alphabet) {
   return(beta)
 }
 
-getP.log.frombook = function(book, alph) {
+getP.log.frombook = function(book, alph, lower = FALSE) {
   m <- matrix(0, nrow=length(alph), ncol=length(alph))
   rownames(m) <- alph
   colnames(m) <- alph
   for (line in readLines(book, encoding="UTF-8")) {
     if (line=="" | line == " " | line == "\r") next
     line <- trim.line(line, alph)
+    if(lower) {
+      line = tolower(line)
+    }
     m["\n", substr(line, 1, 1)] <- m["\n", substr(line, 1, 1)] + 1
     for (i in 1:(nchar(line)-1)) {
       current <- substr(line, i, i)
@@ -70,7 +75,9 @@ getP.log.frombook = function(book, alph) {
 
 }
 
-getB.log.frombook = function(book, alph) {
+
+
+getB.log.frombook = function(book, alph, lower=FALSE) {
 
   m <- matrix(0, nrow=length(alph), ncol=length(alph))
   rownames(m) <- alph
@@ -78,6 +85,9 @@ getB.log.frombook = function(book, alph) {
   for (line in readLines(book, encoding="UTF-8")) {
     if (line=="" | line == " " | line == "\r") next
     line <- trim.line(line, alph)
+    if(lower) {
+      line = tolower(line)
+    }
     m["\n", substr(line, 1, 1)] <- m["\n", substr(line, 1, 1)] + 1
     for (i in 1:(nchar(line)-1)) {
       current <- substr(line, i, i)
@@ -135,22 +145,36 @@ getP.log = function(book.num, alphabet) {
   return(P.log)
 }
 
+getQ.log.book = function(path, alph) {
+  lines = readLines(path, 'UTF9')
+  for(line in lines) {
 
-getQ.log = function(book.num, alphabet) {
-  n = length(alphabet)
-  Q.log = array(dim=c(n,n,n))
+  }
+}
+
+getQ.log= function(book.num, alph) {
+  n = length(alph)
+  Q.log = array(dim=c(n,n,n), dimnames=list(alph, alph, alph))
   
 
   for(i in 3:length(book.num)) {
-    .log[book.num[i-2],book.num[i-1], book.num[i]] = P.log[book.num[i-2], book.num[i-1], book.num[i]] +1
+    Q.log[book.num[i-2],book.num[i-1], book.num[i]] = Q.log[book.num[i-2], book.num[i-1], book.num[i]] +1
   }
 
+  apply(Q.log, 1, function(x) {
+    s = sum(x)
+    if(s = 0 && all(s == 0)) {
+      return matrix(ncol = length(alph), nrow =length(alph), -12)
+    }
+    m = log(x / s)
+    m[m == -Inf] = 
+  })
 
 
   P.log = apply(P.log, 1, function(x) {
     if(sum(x) == 0) { 
       print("all zero")
-      return(numeric(length(alphabet)))
+      return(numeric(length(alph)))
     }
     return(x/sum(x))
   })

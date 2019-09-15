@@ -1,4 +1,3 @@
-
 insertAndReturn = function(conn, x) {
   print("test3")
   x$creationID = 91
@@ -13,3 +12,12 @@ insertAndReturn = function(conn, x) {
   print("test6")
   return(item)
 }
+
+getAttemptsFromIds = function(k.ids, attempts) {
+
+  for(i in attempts) {
+    
+  }
+}
+
+

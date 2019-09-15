@@ -165,6 +165,3 @@ convertMessageToNumeric = function(message, alphabet) {
   return(x)
 }, message))
 }
-
-
-
