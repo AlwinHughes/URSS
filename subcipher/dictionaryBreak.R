@@ -61,6 +61,7 @@ breakWithDictionary = function(ciphertext.num, start.key, dictionary, M, alph) {
     } else {
       print("reject")
     }
+    readline()
       possible.plaintext2 = applycipher.num(inverseSubCipher(sigma), ciphertext.num)
 
       possible.words2 = paste(convertNumericToMessage(possible.plaintext2, alph), collapse = '')
@@ -77,6 +78,8 @@ breakWithDictionary = function(ciphertext.num, start.key, dictionary, M, alph) {
 
   return(list(pq, not.in.word.sig.vec))
 }
+
+#splitregex = regex(" |\n|-|,|/.|\"|'|;")
 
 charactersNotInWord = function(text, dictionary) {
 
@@ -115,11 +118,11 @@ charactersNotInWord = function(text, dictionary) {
     #print(length(w.split))
     if(isInDictionary(dictionary, tolower(w))) {
     #if(tolower(w) %in% dictionary) {
-      #cat(w , " word\n")
+      cat(w , " word\n")
     } else {
       char.not.in.word = char.not.in.word  + nchar(w)
       #not.word.count = not.word.count +1
-      #cat(w, " not\n")
+      cat(w, " not\n")
     }
   }
   return(char.not.in.word);

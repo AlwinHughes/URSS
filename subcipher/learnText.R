@@ -22,8 +22,6 @@ loadBookToNum = function(path, alph) {
     ret[i] = match(book[i],alph)
   }
   return(ret)
-
-  
 }
 
 
@@ -163,11 +161,11 @@ getQ.log= function(book.num, alph) {
 
   apply(Q.log, 1, function(x) {
     s = sum(x)
-    if(s = 0 && all(s == 0)) {
-      return matrix(ncol = length(alph), nrow =length(alph), -12)
+    if(s == 0 && all(s == 0)) {
+      return(matrix(ncol = length(alph), nrow =length(alph), -12))
     }
     m = log(x / s)
-    m[m == -Inf] = 
+   # m[m == -Inf] = 
   })
 
 
@@ -191,6 +189,46 @@ getQ.log= function(book.num, alph) {
 
 
   return(P.log)
+}
+
+get.jumps = function(path, alph, max.jump, normalise = FALSE) {
+
+  lines = readLines(path)
+
+  #initialize jumps list
+  jumps <- matrix(0, nrow=length(alph), ncol=max.jump+1)
+
+  last.occurrence = integer(length(alph))
+  nl.index = match("\n", alph)
+
+
+  i = 0
+  for(l in lines) {
+    num.l = c(convertMessageToNumeric(l, alph) , nl.index)
+    if(l == '') {
+      #skip empty strings
+      next
+    }
+    #print(num.l)
+    for(j in 1:length(num.l)) {
+      char.num = num.l[j]
+      jump = i - last.occurrence[char.num]
+      if(jump > max.jump) {
+        jump = max.jump + 1
+      }
+      #cat("char: ", char.num, " jump: ", jump, " last ", last.occurrence[char.num], "\n")
+      jumps[char.num, jump] = jumps[char.num,jump] + 1
+      last.occurrence[char.num] = i
+      i = i + 1
+    }
+    #readline()
+  }
+  if(normalise) {
+    jumps = jumps / rowSums(jumps)
+  }
+
+  return(jumps)
+
 }
 
 

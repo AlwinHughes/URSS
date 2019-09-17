@@ -26,10 +26,11 @@ gradient = function(ciphertext.num, start.key, dictionary, M, alph) {
   sigma.char.not.in.word = charactersNotInWord3(word.list, dictionary)
 
   best.phi.word.list = list()
+  best.phi = integer(length(start.key))
 
   char.not.in.word.vec = integer(M)
   for(i in 1:M) {
-    print("--")
+    print("-")
 
     for(j in 1:(KEY.LEN)) {
       print("--")
@@ -43,7 +44,7 @@ gradient = function(ciphertext.num, start.key, dictionary, M, alph) {
         phi[ij[1]] = sigma[ij[2]]
         phi[ij[2]] = sigma[ij[1]]
 
-        print( convertNumericToMessage(applycipher.num(inverseSubCipher(phi), ciphertext.num),alph)[1:400])
+        #print( convertNumericToMessage(applycipher.num(inverseSubCipher(phi), ciphertext.num),alph)[1:400])
         cat("swapped", alph[phi[ij[1]]], " and ", alph[phi[ij[2]]], "\n")
 
         if(any(ij == space.index) || any(ij == nl.index)) {
@@ -58,15 +59,17 @@ gradient = function(ciphertext.num, start.key, dictionary, M, alph) {
         }
 
         if(phi.char.not.in.word < sigma.char.not.in.word) {
-          sigma = phi
+          print("found new best")
           sigma.char.not.in.word = phi.char.not.in.word
           best.phi.word.list = phi.word.list
+          best.phi = phi
         }
         cat("scored ", phi.char.not.in.word, "\n")
         #readline()
 
       }
     }
+    sigma = best.phi
     word.list = best.phi.word.list
     char.not.in.word.vec[i] = sigma.char.not.in.word
 
